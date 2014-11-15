@@ -156,7 +156,7 @@ Header Settings
 
 #header{
 	width:100%;
-	height:80px;
+	height:100px;
 	padding-bottom:10px;
 	background:url(images/color_bar.gif) repeat-x bottom left;
 }
@@ -361,7 +361,7 @@ span#title_station{
 #time_table{
 	border:6px solid #595959;
 	border-radius:30px;
-	padding:20px;
+	padding:10px 5px;
 }
 
 #get_time{
@@ -482,6 +482,10 @@ Result Settings (Default) --- Time Table
 	border:4px solid #595959;
 	border-radius:8px;
 	line-height:2;
+	margin-left:4px;
+-webkit-box-shadow: 0px 4px 5px 0px rgba(50, 50, 50, 0.3);
+-moz-box-shadow:    0px 4px 5px 0px rgba(50, 50, 50, 0.3);
+box-shadow:         0px 4px 5px 0px rgba(50, 50, 50, 0.3);
 }
 
 .station{
@@ -489,6 +493,7 @@ Result Settings (Default) --- Time Table
 	padding:10px ;
 	background:rgba(89,89,89,0.3);
 	border-radius:8px;
+	margin-left:20px;
 	line-height:2;
 }
 
@@ -497,6 +502,7 @@ Result Settings (Default) --- Time Table
 	height:80px;
 	line-height:5;
 	padding-left:40px;
+	margin-left:20px;
 	background:url(images/yajirushi_vertical_mobile.png) no-repeat 10px ;
 }
 
@@ -572,11 +578,12 @@ Result Settings (Chiyoda Line) --- Time Table
 
 #Chiyoda .current_station{
 	border-color:#009944;
-	background:rgba(0,153,68,0.4);
+	background:#7FCCA2;
 }
 
+
 #Chiyoda .station{
-	background:rgba(0,153,68,0.2);
+	background:#CCEBDA;
 }
 
 /*====================================
@@ -593,12 +600,14 @@ Result Settings (Fukutoshin Line) --- Time Table
 
 #Fukutoshin .current_station{
 	border-color:#bb641d;
-	background:rgba(187,100,29,0.5);
+	background:#CE9161;
 }
 
+
 #Fukutoshin .station{
-	background:rgba(187,100,29,0.3);
+	background:#EAD0BB;
 }
+
 
 /*====================================
 Result Settings (Ginza Line) --- Time Table
@@ -612,13 +621,14 @@ Result Settings (Ginza Line) --- Time Table
 	border-color:#f39700
 }
 
+
 #Ginza .current_station{
 	border-color:#f39700;
-	background:rgba(243,151,0,0.5);
+	background:#F5B548;
 }
 
 #Ginza .station{
-	background:rgba(243,151,0,0.3);
+	background:#FBE0B2;
 }
 
 /*====================================
@@ -633,14 +643,16 @@ Result Settings (Hibiya Line) --- Time Table
 	border-color:#9caeb7
 }
 
+
 #Hibiya .current_station{
 	border-color:#9caeb7;
-	background:rgba(156,174,183,0.5);
+	background:#B4C3C8;
 }
 
 #Hibiya .station{
-	background:rgba(156,174,183,0.3);
+	background:#E1E7E9;
 }
+
 
 /*====================================
 Result Settings (Marunouchi Line) --- Time Table
@@ -656,11 +668,11 @@ Result Settings (Marunouchi Line) --- Time Table
 
 #Marunouchi .current_station{
 	border-color:#CF0010;
-	background:rgba(230,0,18,0.4);
+	background:#F4919A;
 }
 
 #Marunouchi .station{
-	background:rgba(230,0,18,0.2);
+	background:#FACCD0;
 }
 
 /*====================================
@@ -677,12 +689,13 @@ Result Settings (Namboku Line) --- Time Table
 
 #Namboku .current_station{
 	border-color:#00ada9;
-	background:rgba(0,173,169,0.5);
+	background:#6DCFCD;
 }
 
 #Namboku .station{
-	background:rgba(0,173,169,0.3);
+	background:#B2E6E5;
 }
+
 
 /*====================================
 Result Settings (Tozai Line) --- Time Table
@@ -696,13 +709,14 @@ Result Settings (Tozai Line) --- Time Table
 	border-color:#00a7db
 }
 
+
 #Tozai .current_station{
 	border-color:#00a7db;
-	background:rgba(0,167,219,0.5);
+	background:#69CAE9;
 }
 
 #Tozai .station{
-	background:rgba(0,167,219,0.3);
+	background:#B2E4F4;
 }
 
 /*====================================
@@ -717,14 +731,16 @@ Result Settings (Yurakucho Line) --- Time Table
 	border-color:#d7c447
 }
 
+
 #Yurakucho .current_station{
 	border-color:#d7c447;
-	background:rgba(215,196,71,0.5);
+	background:#E3D57D;
 }
 
 #Yurakucho .station{
-	background:rgba(215,196,71,0.3);
+	background:#F3EDC7;
 }
+
 
 /*====================================
 Result Settings (Hanzomon Line) --- Time Table
@@ -740,12 +756,13 @@ Result Settings (Hanzomon Line) --- Time Table
 
 #Hanzomon .current_station{
 	border-color:#9b7cb6;
-	background:rgba(155,124,182,0.5);
+	background:#BEA8CF;
 }
 
 #Hanzomon .station{
-	background:rgba(155,124,182,0.3);
+	background:#E1D7E9;
 }
+
 
 /*====================================
 Footer Settings 
@@ -762,11 +779,11 @@ Footer Settings
 }
 
 #reload_btn{
-	float:left;
+	display:block
 }
 
 #show_btn{
-	float:right;
+	display:block;
 }
 
 #footer{
@@ -797,4 +814,10 @@ Footer Settings
 
 #footer_contents p{
 	text-align:center;
+}
+
+#static{
+	display:block;
+	line-height:1.8;
+	margin:10px 0;
 }

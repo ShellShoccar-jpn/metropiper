@@ -65,17 +65,15 @@ if [ ! -f "$Homedir/DATA/METRO_VOC_MST.TXT" ]; then
   exit 1
 fi
 
-# --- 与えられたアクセストークンを設定 -------------------------------
-File_token=$Homedir/CONF/ACCESSTOKEN.TXT
-if [ ! -f "$File_token" ]; then
-  echo "${0##*/}: The file contains access token is not found." 1>&2
-  exit 1
-fi
-appid=$(env - awk '/^[[:alnum:]]+$/' "$File_token")
-if [ -z "$appid" ]; then
-  echo "${0##*/}: The access token is not valid." 1>&2
-  exit 1
-fi
+# --- アクセストークン・APIエンドポイントを設定 ----------------------
+s=$Homedir/CONF/ACCESSTOKEN.TXT
+[ -f "$s" ] || { echo "${0##*/}: ACCESSTOKEN.TXT not found" 1>&2; exit 1; }
+appid=$(env - awk '/^[[:alnum:]]+$/' "$s")
+[ -n "$appid" ] || { echo "${0##*/}: Invaid access token" 1>&2; exit 1; }
+s=$Homedir/CONF/API_DATAPOINTS.TXT
+[ -f "$s" ] || { echo "${0##*/}: API_DATAPOINTS.TXT not found" 1>&2; exit 1; }
+urlbase=$(grep -E '^https?://[a-z0-9.-]+(/[!-~]*)?$' "$s")
+[ -n "$urlbase" ] || { echo "${0##*/}: Invaid API datapoints" 1>&2; exit 1; }
 
 # --- その他定義 -----------------------------------------------------
 # 1)コマンドパスの追加
@@ -206,7 +204,7 @@ esac
 File_cache="$Homedir/TMP/odpt:Train-$rwcode.cache.txt"
 
 # --- 呼び出しURLの設定 ----------------------------------------------
-url='https://api.tokyometroapp.jp/api/v2/datapoints?rdf:type=odpt:Train&odpt:railway='$rwcode'&acl:consumerKey='$appid
+url="$urlbase?rdf:type=odpt:Train&odpt:railway=$rwcode&acl:consumerKey=$appid"
 
 # --- 有効期限内の指定路線のキャッシュファイルはあるか?(あれば戻り値0)
 touch $Tmp-now # 現在日時タイムスタンプを持つファイルを作る

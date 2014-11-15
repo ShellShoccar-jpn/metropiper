@@ -2,14 +2,21 @@
 <html lang="ja">
 
 <head>
+<title>接近情報表示プログラム「メトロパイパー」</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="東京メトロのオープンデータ活用コンテストを利用した接近情報表示プログラム「メトロパイパー」">
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta property="og:title" content="列車接近情報表示「メトロパイパー」">
+<meta property="og:type" content="website">
+<meta property="og:description" content="リアルタイムで東京メトロの列車位置情報が分かります。使い方は知りたい駅名と行きたい方面を選ぶだけ！すると、知りたい駅の近くを走る列車­情報が表示されます。">
+<meta property="og:url" content="http://metropiper.com/HTML/MAIN.HTML">
+<meta property="og:image" content="http://metropiper.com/HTML/images/logo_ogp.png">
+<meta property="og:site_name" content="接近情報表示プログラム「メトロパイパー」">
 <meta name="viewport" content="width=480px">
 <link rel="stylesheet" href="style.css" media="screen and (min-width:768px)">
 <link rel="stylesheet" href="style_mobile.css" media="screen and (min-width:0px) and (max-width:768px)">
-<title>接近情報表示プログラム「メトロパイパー」</title>
+
 <!--[if lt IE 9]>
 		<script type="text/javascript" src="js/respond.min.js"></script>
 <![endif]-->
@@ -40,7 +47,7 @@
 </div><!--/sns-->
 
 <div id="header">
-<h1 id="main_title">メトロパイパー</h1>
+<h1 id="main_title"><img src="images/logo.png" width="400" height="80" alt="メトロパイパー"/></h1>
 </div>
 <div id="main_contents">
 
@@ -96,13 +103,17 @@
 
 
 <input type="button" id="reload_btn" name="reload_btn" value="更新" onclick="get_locinfo(document.getElementById('autoupdate_request').checked)" disabled="disabled"/>
-
+<span  id="static"><a href="#" class="static_url">知りたい駅と方面を固定</a><br>※よく使う駅と方面を固定してからブックマークに登録すると便利です</span>
 <input type="button" id="show_btn" name="show_btn" onClick="toggle_FurtherStations_disp()" value="その他の車両を表示">
 
 </div>
 
 <div id="footer">
 	<div id="footer_contents">
+<!--	<h2>メトロパイパーの使い方</h2>
+	<ul>
+	<li><a href="manual.html">メトロパイパー取り扱い説明書</a></li>
+	</ul>-->
 	<h2>詳細が知りたい人は…</h2>
 	
 	<ul>
