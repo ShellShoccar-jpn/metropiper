@@ -182,7 +182,8 @@ $
      │   └─ GET_LOCTBL_N.SH    - 接近情報生成スクリプト(子。南北線専用)
      │                             (GET_LOCTBL.SHの内容をコンソール向けに加工)
      ├─ CONF/                 ・各種設定ファイル置き場
-     │   └─ ACCESSTOKEN.TXT    - 取得したアクセストークンを設定するファイル
+     │   ├─ ACCESSTOKEN.TXT    - 取得したアクセストークンを設定するファイル
+     │   └─ API_DATAPOINTS.TXT - WebAPIのURLを設定するファイル
      ├─ DATA/                 ・各種マスターデータ等の置き場
      │   ├─ SNUM2RWSN_MST.TXT  - 駅ナンバーから各種情報を引くためのマスター
      │   ├─ RWC2RWN_MST.TXT    - 路線コードから路線名を引くためのマスター
