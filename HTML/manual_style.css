@@ -1,0 +1,177 @@
+@charset "UTF-8";
+/*====================================
+Reset Settings
+====================================*/
+/*
+YUI 3.17.2 (build 9c3c78e)
+Copyright 2014 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+http://yuilibrary.com/license/
+*/
+
+/**
+ * Percents could work for IE, but for backCompat purposes, we are using keywords.
+ * x-small is for IE6/7 quirks mode.
+ */
+.yui3-cssfonts body, .yui3-cssfonts {
+	font: 13px/1.231 arial, helvetica, clean, sans-serif;
+ *font-size:small; /* for IE */
+ *font:x-small; /* for IE in quirks mode */
+}
+/**
+ * Nudge down to get to 13px equivalent for these form elements
+ */ 
+.yui3-cssfonts select, .yui3-cssfonts input, .yui3-cssfonts button, .yui3-cssfonts textarea {
+	font: 99% arial, helvetica, clean, sans-serif;
+}
+/**
+ * To help tables remember to inherit
+ */
+.yui3-cssfonts table {
+	font-size: inherit;
+	font-size:100%;
+}
+/**
+ * Bump up IE to get to 13px equivalent for these fixed-width elements
+ */
+.yui3-cssfonts pre, .yui3-cssfonts code, .yui3-cssfonts kbd, .yui3-cssfonts samp, .yui3-cssfonts tt {
+	font-family: monospace;
+ *font-size:108%;
+	line-height: 100%;
+}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.cssfonts-context {
+	display: none;
+}
+/*フロート解除用のハック*/
+/*clearfixの設定*/
+.clearfix:after{  
+visibility:hidden;/*見えなくする*/ 
+height:0;/*見えなくする*/
+display: block;/*block要素にする*/
+font-size: 0;  
+content: " ";  
+clear: both;  
+}  
+* html .clearfix             { zoom: 1; } /* IE6 */  
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+html {
+	color: #000;
+	background: #FFF;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+fieldset, img {
+	border: 0;
+}
+/*
+	TODO think about hanlding inheritence differently, maybe letting IE6 fail a bit...
+*/
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+caption, th {
+	text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before, q:after {
+	content: '';
+}
+abbr, acronym {
+	border: 0;
+	font-variant: normal;
+}
+/* to preserve line-height and selector appearance */
+sup {
+	vertical-align: text-top;
+}
+sub {
+	vertical-align: text-bottom;
+}
+input, textarea, select {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+ *font-size:100%; /*to enable resizing for IE*/
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
+}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.cssreset {
+	display: none;
+}
+
+/*====================================
+General Settings
+====================================*/
+body{
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	color:#595959;
+}
+
+#wrapper{
+	width:100%;
+}
+
+#header{
+	width:960px;
+	padding:20px;
+	margin:0 auto;
+}
+
+#header h1{
+	font-size:2.6em;
+	font-weight:bold;
+	margin-bottom:30px;
+}
+
+#bar{
+	display:inline;
+	width:0px;
+	height:63px;
+	border:6px solid #00578d;
+	border-radius:6px;
+	margin-right:15px;
+}
+
+#header p{
+	font-size:1.6em;
+	margin-left:45px;
+}
+
+#main_contents{
+	width:940px;
+	padding:20px;
+	margin:0 auto;
+}
+
+#img_area{
+	float:left;
+	width:600px;
+	height:1117px;
+	background:url(images/ss_pc.png) no-repeat;
+}
+
+#description_area{
+	float:right;
+	width:300px;
+	margin-left:20px;
+}
+
