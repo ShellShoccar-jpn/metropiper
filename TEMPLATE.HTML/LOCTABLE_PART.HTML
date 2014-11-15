@@ -1,0 +1,44 @@
+
+
+<!-- LOC_TABLE -->
+<!-- LC_HEADER (主にタイトル欄) === 1:路線コード(最後の単語のみ) 2:路線名("東京メトロ"文字列なし) 3:知りたい駅コード 4:知りたい駅名 5,6,7:発表日時(YYYYMMDDhhmmss,UNIX時間,可読形式) 8,9,10:アクセス日時(YYYYMMDDhhmmss,UNIX時間,可読形式) 11,12,13:次回更新日時(YYYYMMDDhhmmss,UNIX時間,可読形式) 14:何秒前の情報か 15:更新間隔秒数 === -->
+<div id="%1">
+  <div id="title_area" class="clearfix">
+    <div id="tile_station">
+      <span id="title_station">%2-%4駅</span>の近接表示
+    </div>
+    <div id="get_time">
+      %7現在
+    </div>
+    <div id="time_lag">
+      今から<span id="second">約%14秒</span>前の情報です。
+    </div>
+    <div id="auto_update">
+      <input type="hidden"   id="pub_unixtime"       name="pub_unixtime"       value="%6"                 />
+      <input type="hidden"   id="acc_unixtime"       name="acc_unixtime"       value="%9"                 />
+      <input type="hidden"   id="val_unixtime"       name="val_unixtime"       value="%12"                />
+      <input type="hidden"   id="upd_interval"       name="upd_interval"       value="%15"                />
+    </div>
+  </div>
+
+  <div id="time_table" class="clearfix">
+<!-- /LC_HEADER -->
+<!-- LC_ITERATION-1 (繰り返し区間メイン…駅)   === 1:レコード種別("current_station","station","between") 2:2駅より離れていれば"further"  === -->
+    <div class="%1 %2 clearfix">                             <!-- 注目駅:"current_station" 他駅:"station" 駅間:"between"  -->
+  <!-- LC_ITERATION-2 (繰り返し区間サブ…車両) === 3:駅ナンバー 4:駅名 5:種別コード 6:種別名 7:行先駅 8:車両会社 9:標準到着時間 ============ -->
+      <div class="station_name">%3 %4</div>         <!-- 駅ナンバー 駅名    (駅間や同名連続2度目以降は空欄で来る)-->
+      <div class="train_info">
+        <div class="train_assort %5">%6</div>       <!-- 種別               (なければ空欄で来る)                 -->
+        <div class="train_for">%7 %8</div>          <!-- 行先駅 車両所有会社(なければ空欄で来る)                 -->
+      </div>
+      <div class="approach_time">%9</div>           <!-- 標準到着時間       (なければ空欄で来る)                 -->
+  <!-- /LC_ITERATION-2 -->
+    </div>
+<!-- /LC_ITERATION-1 -->
+<!-- LC_FOOTER -->
+  </div>
+  <!-- (注)その他車両も表示などのボタンを置く場合は、このあたりに配置 -->
+<!-- /LC_FOOTER -->
+</div>
+ <label><input type="checkbox" id="autoupdate_request" name="autoupdate_request" value="autoupdate_request" /> %15秒ごとに自動更新する</label>
+<!-- /LOC_TABLE -->

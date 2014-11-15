@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="東京メトロのオープンデータ活用コンテストを利用した接近情報表示プログラム「メトロパイパー」">
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="viewport" content="width=480px">
+<link rel="stylesheet" href="style.css" media="screen and (min-width:768px)">
+<link rel="stylesheet" href="style_mobile.css" media="screen and (min-width:0px) and (max-width:768px)">
+<title>接近情報表示プログラム「メトロパイパー」</title>
+<!--[if lt IE 9]>
+		<script type="text/javascript" src="js/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/JavaScript" src="js/SYSTEM.JS"></script>
+<!--手書きJavascript-->
+</head>
+
+<body onload="init()" class="yui3-cssfonts ie8">
+<!--[if lt IE 9]><body onload="init()" class="yui3-cssfonts ie8"><![endif]-->
+<div id="wrapper">
+
+<div id="sns" class="clearfix">
+<div id="tweet">
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://metropiper.com/HTML/MAIN.HTML" data-lang="ja">ツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div><!--/tweet-->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="http://metropiper.com/HTML/MAIN.HTML" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+<!--/like button-->
+</div><!--/sns-->
+
+<div id="header">
+<h1 id="main_title">メトロパイパー</h1>
+</div>
+<div id="main_contents">
+
+
+
+<h2>何駅の何方面の接近表示を見ますか?</h2>
+<div id="selector" class="clearfix">
+<div class="selector_box">
+	<div id="selector_current_title">知りたい駅</div>
+		<div id="selector_current">
+		<div class="custom-select" id="selector1">
+		<select id="from_snum" name="from_snum" disabled="disabled" onchange="set_snum_to_tosnum()" >
+		   <!-- FROM_SELECT_BOX -->
+		   <option value="-">選んでください</option>
+		   <!-- FROM_SNUM_LIST
+		   <option value="%1">%1 : %2線-%3駅</option>
+				FROM_SNUM_LIST -->
+		   <!-- FROM_SELECT_BOX -->
+		 </select>
+		 </div><!--/select_wrapper-->
+		 </div><!--/selector_current-->
+</div><!--/selector_box-->
+
+<div id="yajirushi_area"></div>
+
+<div class="selector_box">
+	<div id="selector_for_title">行きたい方面</div>
+		 <div id="selector_for">
+		 <div class="custom-select" id="selector2">
+		 <select id="to_snum" name="to_snum" disabled="disabled" onchange="get_locinfo()" >
+		   <!-- TO_SELECT_BOX -->
+		   <option value="-">選んでください</option>
+		   <!-- TO_SNUM_LIST
+		   <option value="%1">%1 : %2線-%3駅</option>
+				TO_SNUM_LIST -->
+		   <!-- TO_SELECT_BOX -->
+		 </select>
+		 </div><!--/select_wrapper-->
+		 </div><!--/selector_for-->
+</div><!--/selector_box-->
+</div><!--/selector-->
+
+     
+
+
+
+<div id="result">
+ここに表示されます……
+</div>
+</div><!--/main_contents-->
+
+<div id="btn_area" class="clearfix">
+
+
+<input type="button" id="reload_btn" name="reload_btn" value="更新" onclick="get_locinfo(document.getElementById('autoupdate_request').checked)" disabled="disabled"/>
+
+<input type="button" id="show_btn" name="show_btn" onClick="toggle_FurtherStations_disp()" value="その他の車両を表示">
+
+</div>
+
+<div id="footer">
+	<div id="footer_contents">
+	<h2>詳細が知りたい人は…</h2>
+	
+	<ul>
+	<li><a href="http://qiita.com/richmikan@github/items/6de979e7608180956862">使い方解説ページ</a></li>
+	<li><a href="http://richlab.hatenablog.com/entry/2014/09/21/140157">技術解説ページ</a></li>
+	<li><a href="https://github.com/ShellShoccar-jpn/metropiper">ソースコード</a></li>
+	</ul>
+<p>Copyright 2014 MetroPiper All Rights Reserved.</p> 
+	</div><!--/footer_contetns-->
+</div><!--/footer-->
+</div><!--/wrapper-->
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+#! /bin/sh
+
+# designed by Nobuaki Tounaka
+# written by 321516
+
+# print the usage and exit
+print_usage_and_exit () {
+  cat <<-__USAGE 1>&2
+	Usage   : ${0##*/} [options] <filename> <file>
+	        : -d delete the key fields from the output file
+	        : -a appending mode
+	        : -z output gzipped files
+	Version : Mon Nov  3 21:15:14 JST 2014
+	        : Open usp Tukubai (POSIX.1 Bourne Shell/POSIX.1 commands/gzip/UTF-8)
+__USAGE
+  exit 1
+}
+# the alternative of the mktemp command
+which mktemp >/dev/null 2>&1 || {
+  mktemp_fileno=0
+  mktemp() {
+    mktemp_fileno=$((mktemp_fileno+1))
+    (
+      mktemp_filename="/tmp/${0##*/}.$$.$mktemp_fileno"
+      case "$1" in
+        -d) touch "$mktemp_filename";;
+        *)  mkdir "$mktemp_filename";;
+      esac
+      chmod 600 "$mktemp_filename"
+      echo "$mktemp_filename"
+    )
+  }
+}
+
+
+# initialize
+PATH='/usr/bin:/bin:/usr/local/bin'
+LF=$(printf '\\\n_'); LF=${LF%_}
+aopt='>'
+dopt='#'
+zopt=0
+dir_w=''
+file_w=''
+file_r=''
+#
+# [memo] expected behavior
+# (a) with neither -a nor -z
+#     overwrite to the target files directly
+# (b) with -a only
+#     append    to the target files directly
+# (c) with -z only
+#     1) make a temporary directory
+#     2) create output files which are not gzipped yet
+#     3) gzip and overwrite to the target files
+#     4) remove the temporary directory
+# (d) with -a and -z
+#     1) make a temporary directory
+#     2) create output files which are not gzipped yet
+#     3) gzip and append to the target files
+#     4) remove the temporary directory
+
+
+# parse arguments
+[ $# -ge 1 ] || print_usage_and_exit
+i=0
+for arg in "$@"; do
+  i=$((i+1))
+  case "${arg#-}" in
+    a)                       aopt='>>'                 ;;
+    d)                                  dopt=''        ;;
+    z)                                           zopt=1;;
+    ad|da)                   aopt='>>'; dopt=''        ;;
+    az|za)                   aopt='>>';          zopt=1;;
+    dz|zd)                              dopt=''; zopt=1;;
+    adz|azd|daz|dza|zad|zda) aopt='>>'; dopt=''; zopt=1;;
+    *)
+        if   [ -z "$file_w" ]; then
+          [ $i -ge $(($#-1)) ] || print_usage_and_exit
+          printf '%s' "$arg" | grep -q '%[0-9]\{1,\}' || print_usage_and_exit
+          file_w=${arg##*/}
+          if   [ "$file_w" = "$arg"     ]; then
+            dir_w='./'
+          elif [ "$file_w" = "${arg#/}" ]; then
+            dir_w='/'
+          else
+            dir_w="${arg%/*}/"
+          fi
+        elif [ -z "$file_r" ]; then
+          [ $i -eq $# ] || print_usage_and_exit
+          file_r=$arg
+        else
+          print_usage_and_exit
+        fi
+        ;;
+  esac
+done
+if [ -z "$file_w" ]; then
+  print_usage_and_exit
+fi
+if [ -z "$file_r" ]; then
+  file_r='-'
+elif [ \( ! -f "$file_r"     \) -a \
+       \( ! -c "$file_r"     \) -a \
+       \( ! -p "$file_r"     \) -a \
+       \( "_$file_r" != '_-' \)    ]
+then
+  print_usage_and_exit
+fi
+if [ $zopt -ne 0 ]; then
+  which gzip >/dev/null 2>&1
+  [ $? -eq 0 ] || {
+    echo "${0##*/}: gzip command is required but not found" 1>&2
+    exit 1
+  }
+fi
+
+# make the formula for making filename
+file=$(printf '%s' "$file_w"                                                  |
+       sed 's/\\/\\\\/g'                                                      |
+       sed 's/"/\\"/g'                                                        |
+       sed 's/^.*$/"&"/'                                                      |
+       sed 's/%[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g'         |
+       sed 's/%NF\(-[0-9]\{1,\}\)\{0,1\}\.[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g' |
+       sed '/^"/s/%[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g'                  |
+       sed '/^"/s/%NF\(-[0-9]\{1,\}\)\{0,1\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g'    |
+       sed '/^"/s/%[0-9]\{1,\}/"'"$LF&$LF"'"/g'                               |
+       sed '/^"/s/%NF\(-[0-9]\{1,\}\)\{0,1\}/"'"$LF&$LF"'"/g'                 |
+       grep -v '^$'                                                           |
+       sed '/^%/s/\([%.-]\)0\{1,\}\([1-9]\)/\1\2/g'                           |
+       sed '/^%/s/%\([0-9NF-]*\)\.\([0-9]*\)\.\([0-9]*\)/getsubf($\1,\2,\3)/' |
+       sed '/^%/s/%\([0-9NF-]*\)\.\([0-9]*\)/getsubf($\1,\2,-1)/'             |
+       sed '/^%/s/%\([0-9NF-]*\)/$\1/'                                        |
+       tr '\n' ' '                                                            |
+       sed 's/ *$//'                                                          )
+
+# list the fields to watch changing
+flds=$(printf '%s' "$file_w"                                               |
+       sed 's/^.*$/"&"/'                                                   |
+       sed 's/%[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g'      |
+       sed 's/%NF\(-[0-9]\{1,\}\)\{0,1\}\.[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g' |
+       sed '/^"/s/%[0-9]\{1,\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g'               |
+       sed '/^"/s/%NF\(-[0-9]\{1,\}\)\{0,1\}\.[0-9]\{1,\}/"'"$LF&$LF"'"/g' |
+       sed '/^"/s/%[0-9]\{1,\}/"'"$LF&$LF"'"/g'                            |
+       sed '/^"/s/%NF\(-[0-9]\{1,\}\)\{0,1\}/"'"$LF&$LF"'"/g'              |
+       grep -E '^%([0-9]+|NF(-[0-9]+)?)(\.[0-9]+(\.[0-9]+)?)?$'            |
+       sed 's/\([%.-]\)0\{1,\}\([1-9]\)/\1\2/g'                            |
+       sed 's/%\([0-9NF-]*\)\.\([0-9]*\)\.\([0-9]*\)/getsubf($\1,\2,\3)/'  |
+       sed 's/%\([0-9NF-]*\)\.\([0-9]*\)/getsubf($\1,\2,-1)/'              |
+       sed 's/%\([0-9NF-]*\)/$\1/'                                         |
+       sort                                                                |
+       uniq                                                                |
+       tr '\n' ' '                                                         |
+       sed 's/ *$//'                                                       )
+
+# fields to delete when d option is enabled
+delf=$(echo "$flds"            |
+       sed "s/\\\$/${LF}&/g"   |
+       grep '^\$'              |
+       sed 's/[^0-9$NF-].*$//' |
+       sort                    |
+       uniq                    |
+       sed 's/.*/&=""/'        |
+       tr '\n' ';'             )
+
+# make a temporary directory to create files which are not gzipped yet
+if [ $zopt -ne 0 ]; then
+  tmpdir=$(mktemp -d "$dir_w${0##*/}.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+  if [ $? -eq 0 ]; then
+    trap "rm -rf $tmpdir; exit" EXIT HUP INT QUIT PIPE ALRM TERM
+  else
+    echo "${0##*/}: Cannot create a temporary directory" 1>&2
+    exit 1
+  fi
+  dir_w_final=$dir_w
+  dir_w="$tmpdir/"
+fi
+
+
+# main
+awk '
+# getsubf (preparation : you must call this before using the "getsubf")
+function getsubf_prep() {
+  getsubf_80_1 = sprintf("\200");
+  getsubf_C0_X = sprintf("\300");
+  getsubf_E0_2 = sprintf("\340");
+  getsubf_F0_3 = sprintf("\360");
+  getsubf_F8_4 = sprintf("\370");
+  getsubf_FC_5 = sprintf("\374");
+  getsubf_FE_6 = sprintf("\376");
+  getsubf_K_EF = sprintf("\357");
+  getsubf_K_BD = sprintf("\275");
+  getsubf_K_BE = sprintf("\276");
+  getsubf_K_A0 = sprintf("\240");
+  getsubf_K_C0 = sprintf("\300");
+  getsubf_K_80 = sprintf("\200");
+}
+# return the substr in accordance with the counting rule of self command
+function getsubf(str, startpos, len) {
+  # - "getsubf_substr_s" is a byte offset (start from 1) which the
+  #   "startpos" suggests by the Japanese text position (zenkaku-hankaku;
+  #   start from 1)
+  # - "getsubf_substr_e" is a byte offset + 1 (start from 1) which the
+  #   "len" suggests by the Japanese text width (zenkaku-hankaku;
+  #   start from 1; -1 means "to the end")
+  getsubf_substr_s = 0;
+  getsubf_substr_e = 0;
+  #
+  # - "getsubf"_i is a byte offset (start from 1) from which the function
+  #   will read now
+  # - "getsubf_pos" is a Japanese text position (zenkaku-hankaku; start
+  #   from 1) of the letter which the function will read
+  getsubf_i   = 1;
+  getsubf_pos = 1;
+  while (getsubf_i <= length(str)) {
+    if (getsubf_substr_s == 0) {
+      if (startpos == getsubf_pos) {
+        getsubf_substr_s = getsubf_i;
+        if (len == -1) {
+          break;
+        }
+      } else if (startpos < getsubf_pos) {
+        _assert_exit = 1;
+        exit _assert_exit;
+      }
+    }
+    getsubf_letter = substr(str, getsubf_i, 1);
+    if (getsubf_letter < getsubf_80_1) {
+      getsubf_i++;
+      getsubf_pos++;
+    } else if (getsubf_letter < getsubf_C0_X) {
+      # invalid UTF-8 character
+      getsubf_i++;
+    } else if (getsubf_letter < getsubf_E0_2) {
+      getsubf_i   += 2;
+      getsubf_pos += 2;
+    } else if (getsubf_letter < getsubf_F0_3) {
+      if (getsubf_letter == getsubf_K_EF) {
+        getsubf_letter2 = substr(str, getsubf_i+1, 1);
+        if (getsubf_letter2 == getsubf_K_BD) {
+          getsubf_letter3 = substr(str, getsubf_i+2, 1);
+          if ((getsubf_letter3 >= getsubf_K_A0) &&
+              (getsubf_letter3 <  getsubf_K_C0)  ) {
+            getsubf_pos += 1;
+          } else {
+            getsubf_pos += 2;
+          }
+        } else if (getsubf_letter2 == getsubf_K_BE) {
+          getsubf_letter3 = substr(str, getsubf_i+2, 1);
+          if ((getsubf_letter3 >= getsubf_K_80) &&
+              (getsubf_letter3 <  getsubf_K_A0)  ) {
+            getsubf_pos += 1;
+          } else {
+            getsubf_pos += 2;
+          }
+        } else {
+          getsubf_pos += 2;
+        }
+      } else {
+        getsubf_pos += 2;
+      }
+      getsubf_i   += 3;
+    } else if (getsubf_letter < getsubf_F8_4) {
+      getsubf_i   += 4;
+      getsubf_pos += 2;
+    } else if (getsubf_letter < getsubf_FC_5) {
+      getsubf_i   += 5;
+      getsubf_pos += 2;
+    } else if (getsubf_letter < getsubf_FE_6) {
+      getsubf_i   += 6;
+      getsubf_pos += 2;
+    } else {
+      # invalid UTF-8 character
+      getsubf_i++;
+    }
+    if (getsubf_substr_s > 0) {
+      if ((startpos + len) == getsubf_pos) {
+        getsubf_substr_e = getsubf_i;
+        break;
+      } else if (len == 0) {
+        getsubf_substr_e = getsubf_substr_s;
+        break;
+      } else if ((startpos + len) < getsubf_pos) {
+        _assert_exit = 1;
+        exit _assert_exit;
+      }
+    }
+  }
+  if (getsubf_substr_s == 0) {
+    _assert_exit = 1;
+    exit _assert_exit;
+  }
+  return (getsubf_substr_e == 0)                                    \
+    ? substr(str,getsubf_substr_s)                                  \
+    : substr(str,getsubf_substr_s,getsubf_substr_e-getsubf_substr_s);
+}
+
+# init
+BEGIN {
+  getsubf_prep();
+  flds_str0 = "'"$(echo "$flds " | tr -Cd ' ')"'";
+  dir       = "'"$dir_w"'";
+  file      = "";
+}
+
+# main 1) check fields
+{flds_str = '"$flds"';}
+
+# main 2) change file to write when fields has changed
+flds_str!=flds_str0 {
+  close(file);
+  file      = dir '"$file"';
+  flds_str0 = flds_str;
+}
+
+# main 3) write fields to file
+{
+  '"$dopt"''$delf'
+  '"$dopt"'gsub(/  +/, " ");
+  '"$dopt"'sub(/^ +/ , "" );
+  '"$dopt"'sub(/ +$/ , "" );
+  print '$aopt' file;
+}
+' "$file_r"
+[ $? -eq 0 ] || {
+  echo "${0##*/}: Failed to create the output files" 1>&2
+  exit 1
+}
+
+# gzip and make the final files when the temporary directory exists
+if [ -n "${dir_w_final:-}" ]; then
+  find "$dir_w" -type f |
+  while read plainfile; do
+    case $aopt in
+      '>')  gzip >  "${dir_w_final}${plainfile##*/}.gz" < "$plainfile";;
+      '>>') gzip >> "${dir_w_final}${plainfile##*/}.gz" < "$plainfile";;
+      *)    false;;
+    esac
+    [ $? -eq 0 ] || {
+      echo "${0##*/}: Failed to gzip the output files" 1>&2
+      exit 1
+    }
+  done
+  [ -n "$tmpdir" ] && rm -rf "$tmpdir"
+fi

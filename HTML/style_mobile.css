@@ -1,0 +1,800 @@
+@charset "UTF-8";
+/* CSS Document */
+
+@charset "UTF-8";
+/*====================================
+Reset Settings
+====================================*/
+/*
+YUI 3.17.2 (build 9c3c78e)
+Copyright 2014 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+http://yuilibrary.com/license/
+*/
+
+/**
+ * Percents could work for IE, but for backCompat purposes, we are using keywords.
+ * x-small is for IE6/7 quirks mode.
+ */
+.yui3-cssfonts body, .yui3-cssfonts {
+	font: 13px/1.231 arial, helvetica, clean, sans-serif;
+ *font-size:small; /* for IE */
+ *font:x-small; /* for IE in quirks mode */
+}
+/**
+ * Nudge down to get to 13px equivalent for these form elements
+ */ 
+.yui3-cssfonts select, .yui3-cssfonts input, .yui3-cssfonts button, .yui3-cssfonts textarea {
+	font: 99% arial, helvetica, clean, sans-serif;
+}
+/**
+ * To help tables remember to inherit
+ */
+.yui3-cssfonts table {
+	font-size: inherit;
+	font-size:100%;
+}
+/**
+ * Bump up IE to get to 13px equivalent for these fixed-width elements
+ */
+.yui3-cssfonts pre, .yui3-cssfonts code, .yui3-cssfonts kbd, .yui3-cssfonts samp, .yui3-cssfonts tt {
+	font-family: monospace;
+ *font-size:108%;
+	line-height: 100%;
+}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.cssfonts-context {
+	display: none;
+}
+/*フロート解除用のハック*/
+/*clearfixの設定*/
+.clearfix:after{  
+visibility:hidden;/*見えなくする*/ 
+height:0;/*見えなくする*/
+display: block;/*block要素にする*/
+font-size: 0;  
+content: " ";  
+clear: both;  
+}  
+* html .clearfix             { zoom: 1; } /* IE6 */  
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+html {
+	color: #000;
+	background: #FFF;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+fieldset, img {
+	border: 0;
+}
+/*
+	TODO think about hanlding inheritence differently, maybe letting IE6 fail a bit...
+*/
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+caption, th {
+	text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before, q:after {
+	content: '';
+}
+abbr, acronym {
+	border: 0;
+	font-variant: normal;
+}
+/* to preserve line-height and selector appearance */
+sup {
+	vertical-align: text-top;
+}
+sub {
+	vertical-align: text-bottom;
+}
+input, textarea, select {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+ *font-size:100%; /*to enable resizing for IE*/
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
+}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.cssreset {
+	display: none;
+}
+
+/*====================================
+General Settings
+====================================*/
+body{
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif,monospace;
+	color:#595959;
+}
+
+#wrapper{
+	width:100%;
+}
+
+/*====================================
+Header Settings
+====================================*/
+#sns{
+	width:480px;
+	margin:0 auto;
+}
+
+#tweet{
+	margin-top:10px;
+	margin-bottom:10px;
+	float:right;
+}
+
+.fb-like{
+	margin-top:10px;
+	margin-right:10px;
+	margin-bottom:10px;
+	float:right;
+}
+
+#header{
+	width:100%;
+	height:80px;
+	padding-bottom:10px;
+	background:url(images/color_bar.gif) repeat-x bottom left;
+}
+
+h1#main_title{
+	font-size:4em;
+	font-weight:bold;
+	width:460px;
+	margin:0px auto;
+	padding-left:20px;
+}
+
+
+/*====================================
+Main Contents Settings
+====================================*/
+#main_contents{
+	width:460px;
+	margin:0 	auto;
+	padding:10px;
+	margin-top:20px;
+	font-weight:bold;
+}
+
+#main_contents h2{
+	font-size:2.0em;
+	height:60px;
+}
+
+/*====================================
+Selector Settings
+====================================*/
+#selector{
+	margin-bottom:30px;
+}
+
+.selector_box{
+	width:420px;
+	height:230px;
+	margin:0 20px;
+	float:left;
+}
+
+#selector_current_title{
+	width:190px;
+	height:35px;
+	margin-left:30px;
+	margin-right:200px;
+	border-top-right-radius:24px;
+	border-top-left-radius:24px;
+	background:#00578d;
+	color:#FFFFFF;
+	font-size:1.8em;
+	padding-top:5px;
+	text-align:center;
+}
+
+#selector_current{
+	width:408px;
+	height:170px;
+	border:6px solid #00578d;
+	border-radius:24px;
+}
+
+#yajirushi_area{
+	width:240px;
+	height:80px;
+	margin-left:215px;
+	float:left;
+	background:url(images/yajirushi_vertical.png) no-repeat;
+}
+	
+#selector_for_title{
+	width:190px;
+	height:35px;
+	margin-left:30px;
+	margin-right:200px;
+	border-top-right-radius:24px;
+	border-top-left-radius:24px;
+	background:#34720a;
+	color:#FFFFFF;
+	font-size:1.8em;
+	padding-top:5px;
+	text-align:center;
+}
+
+#selector_for{
+	width:408px;
+	height:170px;
+	border:6px solid #34720a;
+	border-radius:24px;
+}
+
+
+select{
+	font-size:1.8em;
+	font-weight:bold;
+}
+
+#selector1{
+	border: 3px solid #324784;
+	color: #324784;
+}
+
+#selector2{
+	border: 3px solid #34720a;
+	color:#34720a;
+}
+
+.custom-select {
+	width:390px;
+	height:40px;
+	background-color: #fff;
+	border-radius:8px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 60px 9px;
+	padding: 0.2em;
+	position: relative;
+	z-index: 1;
+	-webkit-box-shadow: 0px 2px 2px 0px rgba(142,142,142, 0.5);
+	-moz-box-shadow:    0px 2px 2px 0px rgba(142,142,142, 0.5);
+	box-shadow:         0px 2px 2px 0px rgba(142,142,142, 0.5);
+}
+
+.custom-select:before {
+	border-radius:4px;
+	content:"▼";
+	display: block;
+	font-size: 1.2em;
+	height: 100%;
+	line-height: 2.5em;
+	padding: 0 0.625em;
+	position: absolute;
+	top: 0;
+	right: 0px;
+	text-align: center;
+	width: 1em;
+	z-index: -1;
+}
+
+.custom-select select {
+	background-color: transparent;
+	border: 0 none;
+	box-shadow: none;
+	color: #333;
+	display: block;
+	font-size: 100%;
+	line-height: normal;
+	margin: 0;
+	padding: .5em;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.custom-select select::-ms-expand {
+	display: none; /* to ie 10 */
+}
+
+.custom-select select:focus {
+	outline: none;
+}
+
+/* little trick for custom select elements in mozilla firefox  17/06/2014 @rodrigoludgero */
+
+/* pseudo class https://developer.mozilla.org/en-US/docs/Web/CSS/:any */
+
+:-moz-any(.custom-select):before {
+	background-color: #fff; /* this is necessary for overcome the caret default browser */
+	pointer-events: none; /* https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events  */
+	z-index: 1; /* this is necessary for overcome the pseudo element */
+}
+
+/*====================================
+Result Settings (Default) --- Title Area
+====================================*/
+
+#result{
+	margin:0 auto 30px;
+	font-size:14px;
+}
+
+#tile_station{
+	width:460px;
+	height:40px;
+	padding-top:10px;
+	border-bottom:5px solid #595959;
+}
+
+span#title_station{
+	font-size:22px;
+	padding:0 10px;
+	color:#00578d;
+}
+
+#time_table{
+	border:6px solid #595959;
+	border-radius:30px;
+	padding:20px;
+}
+
+#get_time{
+	float:left;
+	width:400px;
+	height:30px;
+	margin:15px 30px 0;
+	font-size:22px;
+
+}
+
+#time_lag{
+	float:left;
+	width:400px;
+	height:40px;
+	margin:10px 30px 0;
+	font-size:20px;
+	text-align:left;
+}
+
+span#second{
+	font-size:24px;
+	color:#34720A;
+	margin:0 5px;
+}
+
+#auto_update{
+	float:right;
+	margin:20px 10px 10px 0;
+}
+
+#auto_update{
+	display:none;
+}
+
+/*====================================
+Result Settings --- Train Assort
+====================================*/
+/*
+特急系:#F34E03
+急行系:#ff3627
+準急系:#00A63C
+快速系:#E7A210
+*/
+
+
+/* 通勤急行*/
+.odpt\.TrainType\:TokyoMetro\.CommuterExpress{
+	color:#ff3627;
+}
+/*通勤特急*/
+.odpt\.TrainType\:TokyoMetro\.CommuterLimitedExpress{
+	color:#F34E03;
+}
+/*通勤快速*/
+.odpt\.TrainType\:TokyoMetro\.CommuterRapid{
+	color:#E7A210;
+}
+/*通勤準急*/
+.odpt\.TrainType\:TokyoMetro\.CommuterSemiExpress{
+	color:#00A63C;
+}
+/*急行*/
+.odpt\.TrainType\:TokyoMetro\.Express {
+	color:#ff3627;
+}
+/*臨時*/
+.odpt\.TrainType\:TokyoMetro\.Extra{
+}
+/*土休急行*/
+.odpt\.TrainType\:TokyoMetro\.HolidayExpress{
+	color:#ff3627;
+}
+/*特急*/
+.odpt\.TrainType\:TokyoMetro\.LimitedExpress {
+	color:#F34E03;
+}
+/* 各停*/
+.odpt\.TrainType\:TokyoMetro\.Local{
+}
+/*快速*/
+.odpt\.TrainType\:TokyoMetro\.Rapid{
+	color:#E7A210;
+}
+/*快速急行*/
+.odpt\.TrainType\:TokyoMetro\.RapidExpress{
+	color:#F34E03;
+}
+/*特急ロマンスカー*/
+.odpt\.TrainType\:TokyoMetro\.RomanceCar{
+	color:#F34E03;
+}
+/*準急*/
+.odpt\.TrainType:TokyoMetro\.SemiExpress{
+	color:#00A63C;
+}
+/*多摩急行*/
+.odpt\.TrainType\:TokyoMetro\.TamaExpress{
+	color:#ff3627;
+}
+/*京葉快速*/
+.odpt\.TrainType\:TokyoMetro\.ToyoRapid{
+	color:#E7A210;
+}
+/*不明*/
+.odpt\.TrainType\:TokyoMetro\.Unknown{
+}
+
+/*====================================
+Result Settings (Default) --- Time Table
+====================================*/
+
+
+.current_station{
+	width:390px;
+	padding:6px ;
+	background:rgba(89,89,89,0.5);
+	border:4px solid #595959;
+	border-radius:8px;
+	line-height:2;
+}
+
+.station{
+	width:390px;
+	padding:10px ;
+	background:rgba(89,89,89,0.3);
+	border-radius:8px;
+	line-height:2;
+}
+
+.between{
+	width:380px;
+	height:80px;
+	line-height:5;
+	padding-left:40px;
+	background:url(images/yajirushi_vertical_mobile.png) no-repeat 10px ;
+}
+
+.station_name{
+	float:left;
+	width:290px;
+}
+
+.train_info{
+	float:left;
+	width:285px;
+}
+
+.approach_time{
+	float:right;
+	width:75px;
+	text-align:right;
+}
+
+.train_assort{
+	float:left;
+	margin-right:5px;
+}
+
+.train_for{
+	float:left;
+}
+
+.further{
+	display:none;
+}
+
+/*
+between train_info Overwirte
+*/
+
+.between .approach_time{
+	padding-right:20px;
+}
+
+/*
+between train_info Overwirte End
+*/
+
+/*
+staition train_info Overwrite 
+*/
+.station .train_info{
+	margin-left:28px;
+}
+
+.current_station .train_info{
+	margin-left:28px;
+}
+
+/*
+staition train_info Overwrite 
+*/
+
+
+
+/*====================================
+Result Settings (Chiyoda Line) --- Time Table
+====================================*/
+
+#Chiyoda #tile_station{
+	border-color:#009944;
+}
+
+#Chiyoda #time_table{
+	border-color:#009944
+}
+
+#Chiyoda .current_station{
+	border-color:#009944;
+	background:rgba(0,153,68,0.4);
+}
+
+#Chiyoda .station{
+	background:rgba(0,153,68,0.2);
+}
+
+/*====================================
+Result Settings (Fukutoshin Line) --- Time Table
+====================================*/
+
+#Fukutoshin #tile_station{
+	border-color:#bb641d;
+}
+
+#Fukutoshin #time_table{
+	border-color:#bb641d
+}
+
+#Fukutoshin .current_station{
+	border-color:#bb641d;
+	background:rgba(187,100,29,0.5);
+}
+
+#Fukutoshin .station{
+	background:rgba(187,100,29,0.3);
+}
+
+/*====================================
+Result Settings (Ginza Line) --- Time Table
+====================================*/
+
+#Ginza #tile_station{
+	border-color:#f39700;
+}
+
+#Ginza #time_table{
+	border-color:#f39700
+}
+
+#Ginza .current_station{
+	border-color:#f39700;
+	background:rgba(243,151,0,0.5);
+}
+
+#Ginza .station{
+	background:rgba(243,151,0,0.3);
+}
+
+/*====================================
+Result Settings (Hibiya Line) --- Time Table
+====================================*/
+
+#Hibiya #tile_station{
+	border-color:#9caeb7;
+}
+
+#Hibiya #time_table{
+	border-color:#9caeb7
+}
+
+#Hibiya .current_station{
+	border-color:#9caeb7;
+	background:rgba(156,174,183,0.5);
+}
+
+#Hibiya .station{
+	background:rgba(156,174,183,0.3);
+}
+
+/*====================================
+Result Settings (Marunouchi Line) --- Time Table
+====================================*/
+
+#Marunouchi #tile_station{
+	border-color:#e60012;
+}
+
+#Marunouchi #time_table{
+	border-color:#e60012
+}
+
+#Marunouchi .current_station{
+	border-color:#CF0010;
+	background:rgba(230,0,18,0.4);
+}
+
+#Marunouchi .station{
+	background:rgba(230,0,18,0.2);
+}
+
+/*====================================
+Result Settings (Namboku Line) --- Time Table
+====================================*/
+
+#Namboku #tile_station{
+	border-color:#00ada9;
+}
+
+#Namboku #time_table{
+	border-color:#00ada9
+}
+
+#Namboku .current_station{
+	border-color:#00ada9;
+	background:rgba(0,173,169,0.5);
+}
+
+#Namboku .station{
+	background:rgba(0,173,169,0.3);
+}
+
+/*====================================
+Result Settings (Tozai Line) --- Time Table
+====================================*/
+
+#Tozai #tile_station{
+	border-color:#00a7db;
+}
+
+#Tozai #time_table{
+	border-color:#00a7db
+}
+
+#Tozai .current_station{
+	border-color:#00a7db;
+	background:rgba(0,167,219,0.5);
+}
+
+#Tozai .station{
+	background:rgba(0,167,219,0.3);
+}
+
+/*====================================
+Result Settings (Yurakucho Line) --- Time Table
+====================================*/
+
+#Yurakucho #tile_station{
+	border-color:#d7c447;
+}
+
+#Yurakucho #time_table{
+	border-color:#d7c447
+}
+
+#Yurakucho .current_station{
+	border-color:#d7c447;
+	background:rgba(215,196,71,0.5);
+}
+
+#Yurakucho .station{
+	background:rgba(215,196,71,0.3);
+}
+
+/*====================================
+Result Settings (Hanzomon Line) --- Time Table
+====================================*/
+
+#Hanzomon #tile_station{
+	border-color:#9b7cb6;
+}
+
+#Hanzomon #time_table{
+	border-color:#9b7cb6
+}
+
+#Hanzomon .current_station{
+	border-color:#9b7cb6;
+	background:rgba(155,124,182,0.5);
+}
+
+#Hanzomon .station{
+	background:rgba(155,124,182,0.3);
+}
+
+/*====================================
+Footer Settings 
+====================================*/
+
+#btn_area{
+	width:440px;
+	margin:0 auto;
+	padding:20px;
+}
+
+#autoupdate_request{
+	margin:20px 0 0 20px;
+}
+
+#reload_btn{
+	float:left;
+}
+
+#show_btn{
+	float:right;
+}
+
+#footer{
+	width:100%;
+	background:url(images/color_bar.gif) repeat-x 0 0;
+	padding-top:30px
+}
+
+#footer_contents{
+	width:440px;
+	margin:0 auto 30px;
+	padding:0 20px;
+}
+
+#footer_contents h2{
+	font-size:1.6em;
+	font-weight:bold;
+}
+
+#footer_contents ul{
+	font-size:1.2em;
+	margin:10px 10px 30px;
+}
+
+#footer_contents li{
+	padding:5px;
+}
+
+#footer_contents p{
+	text-align:center;
+}
