@@ -209,8 +209,10 @@ url="$urlbase?rdf:type=odpt:Train&odpt:railway=$rwcode&acl:consumerKey=$appid"
 # --- 有効期限内の指定路線のキャッシュファイルはあるか?(あれば戻り値0)
 touch $Tmp-now # 現在日時タイムスタンプを持つファイルを作る
 mkdir -p "${File_cache%/*}"
-find "${File_cache%/*}" -name "${File_cache##*/}" -depth 1 -newer $Tmp-now |
-awk 'END{exit (NR>0)?0:1}'
+find "${File_cache%/*}" -name "${File_cache##*/}" -newer $Tmp-now          |
+awk 'BEGIN                                                    {f=0;     }
+     index(substr($0,length("'"${File_cache%/*}"'")+2),"/")==0{f=1;     }
+     END                                                      {exit 1-f;}'
 cache_is_fresh=$((1-$?))
 
 # --- 有効キャッシュがなければ作る -----------------------------------
