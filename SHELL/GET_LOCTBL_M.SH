@@ -160,7 +160,7 @@ fi
 # --- 当該路線駅ナンバーマスターファイルの作成 -----------------------
 cat $Homedir/DATA/SNUM2RWSN_MST.TXT |
 # 1:駅ナンバー 2:路線コード 3:路線名 4:路線駅コード 5:駅名 6:方面駅コード
-grep "^${from_snum%%[0-9]*}"        | # 指定路線のみに絞り込む
+grep  "^[Mm]"                       | # 丸ノ内線駅のみに絞り込む
 awk '$0!~/^M06/  {print;next;}      # # 中野坂上(M06)レコードは本線の方を選択する
      $0!~/Branch/{print;     }'     | #  (API返却値でもM06では本線コードが用いられる,2014/09/20現在)
 tee $Tmp-this-rw-stn-mst            | # 指定路線の路線駅マスター
@@ -207,8 +207,8 @@ url="$urlbase?rdf:type=odpt:Train&odpt:railway=$rwcode&acl:consumerKey=$appid"
 touch $Tmp-now # 現在日時タイムスタンプを持つファイルを作る
 mkdir -p "${File_cache%/*}"
 find "${File_cache%/*}" -name "${File_cache##*/}" -newer $Tmp-now          |
-awk 'BEGIN                                                    {f=0;     }
-     index(substr($0,length("'"${File_cache%/*}"'")+2),"/")==0{f=1;     }
+awk 'BEGIN                                                    {f=0;     }  #
+     index(substr($0,length("'"${File_cache%/*}"'")+2),"/")==0{f=1;     }  #
      END                                                      {exit 1-f;}'
 cache_is_fresh=$((1-$?))
 
@@ -310,10 +310,10 @@ yarr num=1                                                                   |
 delf 1                                                                       |
 # 1:方面コード 2:発車駅コード 3:到着駅コード 4:種別コード 5:始発駅コード     #
 # 6:終着駅コード 7:車両所有会社コード                                        #
+sed 's/Branch\.NakanoSakaue/.NakanoSakaue/g'                                 | # 中野坂上は本線名義に統一
 awk '{# 方面コードに基づいてその路線のその方面の駅コード列を生成する         #
-      s1=$1;sub(/^.+\./ ,"",s1); # ←駅名のみ                                #
-      s2=$2;sub(/[^.]+$/,"",s2); # ←駅名のうち路線名部分まで                #
-      print $1,s2 s1,$2,$3,$4,$5,$6,$7;                             }'       |
+      s=$6;                                                                  #
+      print $1,s,$2,$3,$4,$5,$6,$7;                                 }'       |
 # 1:方面コード 2:方面に相当する駅コード 3:発車駅コード 4:到着駅コード        #
 # 5:種別コード 6:始発駅コード  7:終着駅コード 8:車両所有会社コード           #
 sort -k2,2                                                                   |
@@ -353,6 +353,9 @@ awk -v dir=$prndir -v rwl=$rwletter '{                                       #
     if ($4 == "-") {                                                         #
       csnum3 = $3 "0";                                                       #
     } else {                                                                 #
+      rwl1 = substr($3,1,length(rwl));               # Mnnとmnnの間であれば  #
+      rwl2 = substr($4,1,length(rwl));               # 路線文字は            #
+      rwl = (rwl1>rwl2) ? rwl1 : rwl2;               # m(小文字)を用いる     #
       fno    = substr($3,length(rwl)+1)*10;                                  #
       tno    = substr($4,length(rwl)+1)*10;                                  #
       csnum3 = sprintf("%s%03d",rwl,fno+(tno-fno)/2);                        #
@@ -369,11 +372,8 @@ awk -v dir=$prndir -v rwl=$rwletter '{                                       #
 # 5:種別コード 6:終着駅コード 7:車両所有会社コード                           #
 awk '$2~/^M/{print;}               # 本線上に在線している列車のみに絞り込む' |
 awk -v dir=$prndir -v ano="${from_snum#M}" '                                 #
-  ($3>$4)==dir                           {print;next;} # 方向一致する列車    #
-  $1~/Honancho$/    &&(dir==0)&&(ano*1<6){print;next;} # と                  #
-  $1~/Honancho$/    &&(dir==1)&&(ano*1>6){print;next;} # 方南町支線の        #
-  $1~/NakanoSakaue$/&&(dir==0)&&(ano*1>6){print;next;} # 一部の列車          #
-  $1~/NakanoSakaue$/&&(dir==1)&&(ano*1<6){print;next;} # に絞り込む      '   |
+  ($3>$4)==dir          {print;next;} # 方向一致する列車に絞り込む           #
+  ($3=="M060")&&($4==$3){print;next;} # M06在線中方南町支線内発着列車も表示' |
 awk -v dir=$prndir '                                                         #
   # 「知りたい駅」を通らない列車については、到着分数を計算させない           #
   BEGIN {asnum3 = "'"$from_snum"'0";}                                        #
@@ -417,6 +417,7 @@ sort -k1,1                                                                      
 # --- 駅間を含む3桁駅ナンバーから駅名を得るマスターファイルを作る ----
 #
 cat $Tmp-this-rw-stn-mst                                                  |
+grep -v "^m"                                                              | # 方南町支線は除去する
 # 1:駅ナンバー 2:路線コード 3:路線名 4:路線駅コード 5:駅名 6:方面駅コード #
 sort -k1,1                                                                |
 self 1 4 5                                                                |

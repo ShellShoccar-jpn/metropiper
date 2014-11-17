@@ -190,8 +190,8 @@ url="$urlbase?rdf:type=odpt:Train&odpt:railway=$rwcode&acl:consumerKey=$appid"
 touch $Tmp-now # 現在日時タイムスタンプを持つファイルを作る
 mkdir -p "${File_cache%/*}"
 find "${File_cache%/*}" -name "${File_cache##*/}" -newer $Tmp-now          |
-awk 'BEGIN                                                    {f=0;     }
-     index(substr($0,length("'"${File_cache%/*}"'")+2),"/")==0{f=1;     }
+awk 'BEGIN                                                    {f=0;     }  #
+     index(substr($0,length("'"${File_cache%/*}"'")+2),"/")==0{f=1;     }  #
      END                                                      {exit 1-f;}'
 cache_is_fresh=$((1-$?))
 

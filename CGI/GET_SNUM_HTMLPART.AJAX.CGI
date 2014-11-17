@@ -109,7 +109,8 @@ HTTP_HDR
 
 # --- 部分HTMLのテンプレート抽出 -------------------------------------
 cat "$Homedir/TEMPLATE.HTML/MAIN.HTML"        |
-sed -n '/FROM_SELECT_BOX/,/FROM_SELECT_BOX/p' > $Tmp-htmltmpl
+sed -n '/FROM_SELECT_BOX/,/FROM_SELECT_BOX/p' |
+sed 's/―/選んでください/'                    > $Tmp-htmltmpl
 
 # --- HTML本体を出力 -------------------------------------------------
 cat "$Homedir/DATA/SNUM2RWSN_MST.TXT"     |

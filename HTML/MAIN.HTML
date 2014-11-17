@@ -20,7 +20,6 @@
 <!--[if lt IE 9]>
 		<script type="text/javascript" src="js/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript" src="js/script.js"></script>
 <script type="text/JavaScript" src="js/SYSTEM.JS"></script>
 <!--手書きJavascript-->
 </head>
@@ -61,7 +60,7 @@
 		<div class="custom-select" id="selector1">
 		<select id="from_snum" name="from_snum" disabled="disabled" onchange="set_snum_to_tosnum()" >
 		   <!-- FROM_SELECT_BOX -->
-		   <option value="-">選んでください</option>
+		   <option value="-">―</option>
 		   <!-- FROM_SNUM_LIST
 		   <option value="%1">%1 : %2線-%3駅</option>
 				FROM_SNUM_LIST -->
@@ -79,7 +78,7 @@
 		 <div class="custom-select" id="selector2">
 		 <select id="to_snum" name="to_snum" disabled="disabled" onchange="get_locinfo()" >
 		   <!-- TO_SELECT_BOX -->
-		   <option value="-">選んでください</option>
+		   <option value="-">―</option>
 		   <!-- TO_SNUM_LIST
 		   <option value="%1">%1 : %2線-%3駅</option>
 				TO_SNUM_LIST -->
@@ -102,7 +101,7 @@
 <div id="btn_area" class="clearfix">
 
 
-<input type="button" id="reload_btn" name="reload_btn" value="更新" onclick="get_locinfo(document.getElementById('autoupdate_request').checked)" disabled="disabled"/>
+<input type="button" id="reload_btn" name="reload_btn" value="更新" onclick="get_locinfo((document.getElementById('autoupdate_request'))?document.getElementById('autoupdate_request').checked:false)" disabled="disabled"/>
 <span  id="static"><a href="#" class="static_url">知りたい駅と方面を固定</a><br>※よく使う駅と方面を固定してからブックマークに登録すると便利です</span>
 <input type="button" id="show_btn" name="show_btn" onClick="toggle_FurtherStations_disp()" value="その他の車両を表示">
 
@@ -110,11 +109,11 @@
 
 <div id="footer">
 	<div id="footer_contents">
-<!--	<h2>メトロパイパーの使い方</h2>
+	<h2>メトロパイパーの使い方</h2>
 	<ul>
 	<li><a href="manual.html">メトロパイパー取り扱い説明書</a></li>
-	</ul>-->
-	<h2>詳細が知りたい人は…</h2>
+	</ul>
+	<h2>開発者向け</h2>
 	
 	<ul>
 	<li><a href="http://qiita.com/richmikan@github/items/6de979e7608180956862">使い方解説ページ</a></li>
