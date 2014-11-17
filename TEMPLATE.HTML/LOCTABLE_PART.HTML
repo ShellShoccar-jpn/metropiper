@@ -26,7 +26,7 @@
 <!-- LC_ITERATION-1 (繰り返し区間メイン…駅)   === 1:レコード種別("current_station","station","between") 2:2駅より離れていれば"further"  === -->
     <div class="%1 %2 clearfix">                             <!-- 注目駅:"current_station" 他駅:"station" 駅間:"between"  -->
   <!-- LC_ITERATION-2 (繰り返し区間サブ…車両) === 3:駅ナンバー 4:駅名 5:種別コード 6:種別名 7:行先駅 8:車両会社 9:標準到着時間 ============ -->
-      <div class="station_name">%3 %4</div>         <!-- 駅ナンバー 駅名    (駅間や同名連続2度目以降は空欄で来る)-->
+      <div class="station_name"><a href="%10" target="_blank">%3 %4</a></div>         <!-- 駅ナンバー 駅名    (駅間や同名連続2度目以降は空欄で来る)-->
       <div class="train_info">
         <div class="train_assort %5">%6</div>       <!-- 種別               (なければ空欄で来る)                 -->
         <div class="train_for">%7 %8</div>          <!-- 行先駅 車両所有会社(なければ空欄で来る)                 -->
@@ -41,4 +41,5 @@
 <!-- /LC_FOOTER -->
 </div>
  <label><input type="checkbox" id="autoupdate_request" name="autoupdate_request" value="autoupdate_request" onclick="set_static_url()" /> %15秒ごとに自動更新する</label>
+<span id="click_station"> 駅名をクリック・タッチすると、駅の詳細情報がご覧になれます（外部サイト）</span>
 <!-- /LOC_TABLE -->

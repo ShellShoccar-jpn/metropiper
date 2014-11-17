@@ -340,6 +340,15 @@ Result Settings (Default) --- Title Area
 	font-size:1.4em;
 }
 
+#result a{
+	text-decoration:none;
+	color:#595959;
+}
+
+#result a:hover{
+	text-decoration:underline;
+}
+
 #tile_station{
 	width:960px;
 	height:60px;
@@ -471,26 +480,38 @@ Result Settings (Default) --- Time Table
 	padding:0 10px ;
 	border:5px solid #595959;
 	border-radius:12px;
-
+	position:relative;
+	margin-left:15px;
 -webkit-box-shadow: 0px 4px 5px 0px rgba(50, 50, 50, 0.3);
 -moz-box-shadow:    0px 4px 5px 0px rgba(50, 50, 50, 0.3);
 box-shadow:         0px 4px 5px 0px rgba(50, 50, 50, 0.3);
 }
 
+.current_station:before{
+	display:block;
+	content:url(images/yajirushi_current_station.png);
+	font-size:30px;
+	color:#EEB814;
+	position:absolute;
+	top:18px;
+	left:-28px;
+}
 
 .station{
 	width:870px;
 	padding:0 10px ;
 	background:#3c3c3c;
 	border-radius:8px;
-	margin-left:25px;
+	margin-left:20px;
 	font-weight:normal;
 }
+
+
 
 .between{
 	width:870px;
 	min-height:90px;
-	margin-left:30px;
+	margin-left:21px;
 	padding:0 10px;
 	background:url(images/yajirushi_vertical.png) no-repeat 80px ;
 	font-weight:normal;
@@ -752,6 +773,14 @@ Result Settings (Hanzomon Line) --- Time Table
 /*====================================
 Footer Settings 
 ====================================*/
+#click_station{
+	display:block;
+	margin-left:20px;
+	margin-top:10px;
+	font-size:0.9em;
+	font-weight:normal;
+}
+
 
 #btn_area{
 	width:960px;
@@ -802,9 +831,11 @@ Footer Settings
 }
 
 #static{
+	font-size:1.3em;
 	float:left;
 	line-height:1.8;
 	display:block;
 	margin-left:20px;
+	margin-top:-5px;
 }
 

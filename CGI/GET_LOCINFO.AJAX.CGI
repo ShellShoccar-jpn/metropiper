@@ -123,41 +123,51 @@ esac
 
 # === HTTPボディー出力 ===============================================
 # --- 1) テーブルボディーハメ ----------------------------------------
-cat $Tmp-loctbl                                                   |
-tail -n +2                                                        |
-# 1:3桁駅ナンバー 2:駅コード 3:駅名 4:種別コード 5:種別名         #
-# 6:目的駅コード 7:目的駅名 8:車両所有業者コード 9:車両所有会社名 #
-# 10:標準到着時間(分) 11(NF):知りたい駅からの±距離(3桁駅numで)   #
-# ※ 在線していない場合、空欄として"-"が来る                      #
-awk '{# レコード種別("current_station","station","between")を決める
-      if      ($NF==0        ) {rectyp = "current_station";}      #
-      else if (match($1,/0$/)) {rectyp = "station"        ;}      #
-      else                     {rectyp = "between"        ;}      #
-      distance = ($NF<-35||15<$NF) ? "further" : "near";          #
-      print rectyp,distance,$1,$3,$4,$5,$7,$9,$10;          }'    |
-# 1:レコード種別 2:2駅より離れていれば"further"、なければ"near"   #
-# 3:3桁駅ナンバー 4:駅名 5:種別コード 6:種別名 7:目的駅名         #
-# 8:車両所有会社名 9:標準到着時間(分)                             #
-awk '{# 同じ3桁駅numと駅名が連続する場合は2つ目以降は空欄"-"にする#
-      if($3==snum0){$3="-";$4="-";}                               #
-      else         {snum0=$3;     }                               #
-      # 各種単語の修飾                                            #
-      if($7!="-"){$7=sprintf("%s行",$7);}                         #
-      if($8!="-"){$8=sprintf("(%s)",$8);}                         #
-      if($9!="-"){if       ($9>0){$9=sprintf("約%s分後", $9);     #
-                  } else if($9<0){$9=sprintf("約%s分前",-$9);     #
-                  } else         {$9="到着";                 }}   #
-      # 2桁駅ナンバーに戻して出力                                 #
-      if(match($3,/5$/)){$3="-";}                                 #
-      print $1,$2,substr($3,1,3),$4,$5,$6,$7,$8,$9;}'             |
-sed 's/\\_/'"$ACK"'/g'                                            | # mojihameコマンドエンコード
-sed 's/\\/\\\\/g'                                                 | # |
-sed 's/_/\\_/g'                                                   | # |
-sed 's/'"$ACK"'/\\\\_/g'                                          | # V
-sed 's/ - / _ /g'                                                 | # null列エンコード
-sed 's/ - / _ /g'                                                 | # |
-sed 's/ -$/ _/g'                                                  | # V
-mojihame -hLC_ITERATION $Homedir/TEMPLATE.HTML/LOCTABLE_PART.HTML > $Tmp-loctblhtml0
+cat $Tmp-loctbl                                                            |
+tail -n +2                                                                 |
+# 1:3桁駅ナンバー 2:駅コード 3:駅名 4:種別コード 5:種別名                  #
+# 6:目的駅コード 7:目的駅名 8:車両所有業者コード 9:車両所有会社名          #
+# 10:標準到着時間(分) 11(NF):知りたい駅からの±距離(3桁駅numで)            #
+# ※ 在線していない場合、空欄として"-"が来る                               #
+awk '{# レコード種別("current_station","station","between")を決める        #
+      if      ($NF==0        ) {rectyp = "current_station";}               #
+      else if (match($1,/0$/)) {rectyp = "station"        ;}               #
+      else                     {rectyp = "between"        ;}               #
+      distance = ($NF<-35||15<$NF) ? "further" : "near";                   #
+      # 東京メトロ駅情報URLを生成                                          #
+      if($2!="-") {                                                        #
+        s=$2;                                                              #
+        sub(/^.+\./,"",s);                                                 #
+        gsub(/[A-Z]/,"-&",s);                                              #
+        s=tolower(substr(s,2));                                            #
+        url=sprintf("http://www.tokyometro.jp/station/%s/index.html",s);   #
+      } else {                                                             #
+        url="#";                                                           #
+      }                                                                    #
+      print rectyp,distance,$1,$3,$4,$5,$7,$9,$10,url;                  }' |
+# 1:レコード種別 2:2駅より離れていれば"further"、なければ"near"            #
+# 3:3桁駅ナンバー 4:駅名 5:種別コード 6:種別名 7:目的駅名                  #
+# 8:車両所有会社名 9:標準到着時間(分) 10:公式サイト駅URL(駅間の場合は"#")  #
+awk '{# 同じ3桁駅numと駅名が連続する場合は2つ目以降は空欄"-"にする         #
+      if($3==snum0){$3="-";$4="-";}                                        #
+      else         {snum0=$3;     }                                        #
+      # 各種単語の修飾                                                     #
+      if($7!="-"){$7=sprintf("%s行",$7);}                                  #
+      if($8!="-"){$8=sprintf("(%s)",$8);}                                  #
+      if($9!="-"){if       ($9>0){$9=sprintf("約%s分後", $9);              #
+                  } else if($9<0){$9=sprintf("約%s分前",-$9);              #
+                  } else         {$9="到着";                 }}            #
+      # 2桁駅ナンバーに戻して出力                                          #
+      if(match($3,/5$/)){$3="-";}                                          #
+      print $1,$2,substr($3,1,3),$4,$5,$6,$7,$8,$9,$10;}'                  |
+sed 's/\\_/'"$ACK"'/g'                                                     | # mojihameコマンドエンコード
+sed 's/\\/\\\\/g'                                                          | # |
+sed 's/_/\\_/g'                                                            | # |
+sed 's/'"$ACK"'/\\\\_/g'                                                   | # V
+sed 's/ - / _ /g'                                                          | # null列エンコード
+sed 's/ - / _ /g'                                                          | # |
+sed 's/ -$/ _/g'                                                           | # V
+mojihame -hLC_ITERATION $Homedir/TEMPLATE.HTML/LOCTABLE_PART.HTML          > $Tmp-loctblhtml0
 # --- 2) テーブルヘッダー追ハメ --------------------------------------
 cat $Tmp-loctbl                                                              |
 head -n 1                                                                    |

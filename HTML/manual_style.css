@@ -159,8 +159,8 @@ body{
 }
 
 #main_contents{
-	width:940px;
-	padding:20px;
+	width:960px;
+	padding:10px;
 	margin:0 auto;
 	font-size:1.2em;
 	line-height:1.8;
@@ -168,9 +168,10 @@ body{
 
 #img_area{
 	float:left;
-	width:600px;
-	height:1250px;
-	background:url(images/SS_PC.png) no-repeat;
+	width:620px;
+	height:1150px;
+	margin-top:30px;
+	background:url(images/SS_PC.png) no-repeat 10px 10px;
 	border:1px solid #EDEDED;
 }
 
