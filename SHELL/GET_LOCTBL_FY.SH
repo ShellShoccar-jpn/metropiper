@@ -68,7 +68,7 @@ fi
 # --- アクセストークン・APIエンドポイントを設定 ----------------------
 s=$Homedir/CONF/ACCESSTOKEN.TXT
 [ -f "$s" ] || { echo "${0##*/}: ACCESSTOKEN.TXT not found" 1>&2; exit 1; }
-appid=$(env - awk '/^[[:alnum:]]+$/' "$s")
+appid=$(env - awk '/^[A-Fa-f0-9]+$/' "$s")
 [ -n "$appid" ] || { echo "${0##*/}: Invaid access token" 1>&2; exit 1; }
 s=$Homedir/CONF/API_DATAPOINTS.TXT
 [ -f "$s" ] || { echo "${0##*/}: API_DATAPOINTS.TXT not found" 1>&2; exit 1; }

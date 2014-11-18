@@ -512,7 +512,7 @@ box-shadow:         0px 4px 5px 0px rgba(50, 50, 50, 0.3);
 
 .between{
 	width:380px;
-	height:80px;
+	min-height:90px;
 	line-height:5;
 	margin-left:15px;
 	padding-left:40px;

@@ -52,17 +52,15 @@ print_usage_and_exit() {
 # --- このシステムのホームディレクトリー -----------------------------
 Homedir="$(d=${0%/*}/; [ "_$d" = "_$0/" ] && d='./'; cd "$d.."; pwd)"
 
-# --- 与えられたアクセストークンを設定 -------------------------------
-File_token=$Homedir/CONF/ACCESSTOKEN.TXT
-if [ ! -f "$File_token" ]; then
-  echo "${0##*/}: The file contains access token is not found." 1>&2
-  exit 1
-fi
-appid=$(env - awk '/^[[:alnum:]]+$/' "$File_token")
-if [ -z "$appid" ]; then
-  echo "${0##*/}: The access token is not valid." 1>&2
-  exit 1
-fi
+# --- アクセストークン・APIエンドポイントを設定 ----------------------
+s=$Homedir/CONF/ACCESSTOKEN.TXT
+[ -f "$s" ] || { echo "${0##*/}: ACCESSTOKEN.TXT not found" 1>&2; exit 1; }
+appid=$(env - awk '/^[[A-Fa-f0-9]+$/' "$s")
+[ -n "$appid" ] || { echo "${0##*/}: Invaid access token" 1>&2; exit 1; }
+s=$Homedir/CONF/API_DATAPOINTS.TXT
+[ -f "$s" ] || { echo "${0##*/}: API_DATAPOINTS.TXT not found" 1>&2; exit 1; }
+urlbase=$(grep -E '^https?://[a-z0-9.-]+(/[!-~]*)?$' "$s")
+[ -n "$urlbase" ] || { echo "${0##*/}: Invaid API datapoints" 1>&2; exit 1; }
 
 # --- その他初期ディレクトリー等定義 ---------------------------------
 # 1)コマンドパスの追加
@@ -110,7 +108,7 @@ fi
 ######################################################################
 
 # --- 呼び出しURLの設定 ----------------------------------------------
-url='https://api.tokyometroapp.jp/api/v2/datapoints?rdf:type=odpt:Train&acl:consumerKey='$appid
+url="${urlbase}?rdf:type=odpt:Train&acl:consumerKey=$appid"
 
 # --- 呼び出してマスターファイルを作る -------------------------------
 curl -s $url                                      |
@@ -125,13 +123,14 @@ sort                                              |
 uniq                                              > $Homedir/DATA/RWC2DIRC_MST.TXT
 # 1:路線コード 2:方面コード                       #
 
+sleep 1 # APIガードタイム対策
 
 ######################################################################
 # 路線名マスター作成
 ######################################################################
 
 # --- 呼び出しURL(路線名マスター作成用)の設定 ------------------------
-url='https://api.tokyometroapp.jp/api/v2/datapoints?rdf:type=odpt:Railway&acl:consumerKey='$appid
+url="${urlbase}?rdf:type=odpt:Railway&acl:consumerKey=$appid"
 
 # --- 呼び出して路線名マスターファイルを作る -------------------------
 curl -s $url                                      |
@@ -145,6 +144,7 @@ sort -k1,1                                        > $Homedir/DATA/RWC2RWN_MST.TX
 # 1:路線コード 2:路線名
 #
 
+sleep 1 # APIガードタイム対策
 
 ######################################################################
 # 駅＆路線情報マスター作成
@@ -153,7 +153,7 @@ sort -k1,1                                        > $Homedir/DATA/RWC2RWN_MST.TX
 ######################################################################
 
 # --- 呼び出しURLの設定 ----------------------------------------------
-url='https://api.tokyometroapp.jp/api/v2/datapoints?rdf:type=odpt:Station&acl:consumerKey='$appid
+url="${urlbase}?rdf:type=odpt:Station&acl:consumerKey=$appid"
 
 # --- 呼び出してマスターファイル(路線名コード状態)を作る -------------
 curl -s $url                                                            |
@@ -216,7 +216,8 @@ if [ -f "$file_vochtml" ]; then
   grep -v '<th[^>]*>'                        |
   sed 's/<[^>]\{1,\}>/ /g'                   |
   awk '{print $1,$2}'                        |
-  LC_ALL=ja_JP.UTF-8 sed 's/[[:blank:]]*$//' > $Tmp-vocmaster0
+  sed 's/[ 	]*$//'                           |
+  sed 's/\(　\)*$//'                         > $Tmp-vocmaster0
   # 2)東京メトロの駅名は載っていないので駅＆路線情報マスターから抽出し、追記
   cat $Homedir/DATA/SNUM2RWSN_MST.TXT |
   awk '{print $4,$5}'                 >> $Tmp-vocmaster0
@@ -227,6 +228,7 @@ if [ -f "$file_vochtml" ]; then
   # 1:各種コード(sorted) 2:各種名称
 fi
 
+sleep 1 # APIガードタイム対策
 
 ######################################################################
 # 標準到着時間マスターを作成

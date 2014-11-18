@@ -51,23 +51,6 @@ if [ ! -f "$Homedir/DATA/SNUM2RWSN_MST.TXT" ]; then
   echo "${0##*/}: The master file (SNUM2RWSN_MST.TXT) is not found." 1>&2
   exit 1
 fi
-# 2)各種ボキャブラリーマスター
-if [ ! -f "$Homedir/DATA/METRO_VOC_MST.TXT" ]; then
-  echo "${0##*/}: The master file (SNUM2RWSN_MST.TXT) is not found." 1>&2
-  exit 1
-fi
-
-# --- 与えられたアクセストークンを設定 -------------------------------
-File_token=$Homedir/CONF/ACCESSTOKEN.TXT
-if [ ! -f "$File_token" ]; then
-  echo "${0##*/}: The file contains access token is not found." 1>&2
-  exit 1
-fi
-appid=$(env - awk '/^[[:alnum:]]+$/' "$File_token")
-if [ -z "$appid" ]; then
-  echo "${0##*/}: The access token is not valid." 1>&2
-  exit 1
-fi
 
 # --- その他定義 -----------------------------------------------------
 # 1)コマンドパスの追加
@@ -171,11 +154,13 @@ awk '$NF==0          {loc = ">>";                      }  #
      $3!="-"&&$1~/5$/{typ = "↓ " $3;                  }  #
      $3!="-"         {dst = $4 "行";                      #
                       own = "(" $5 "車両)";               #
-                      if        ($6>0) {                  #
+                      if        ($6=="-") {               #
+                        tim = "-";                        #
+                      } else if ($6> 0  ) {               #
                         tim = "約" $6 "分後";             #
-                      } else if ($6<0) {                  #
+                      } else if ($6< 0  ) {               #
                         tim = "約" -$6 "分前";            #
-                      } else           {                  #
+                      } else              {               #
                         tim = "到着";                     #
                       }                                }  #
      $3=="-"         {typ = "-";                          #

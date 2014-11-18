@@ -70,7 +70,7 @@ if [ ! -f "$File_token" ]; then
   echo "${0##*/}: The file contains access token is not found." 1>&2
   exit 1
 fi
-appid=$(env - awk '/^[[:alnum:]]+$/' "$File_token")
+appid=$(env - awk '/^[A-Fa-f0-9]+$/' "$File_token")
 if [ -z "$appid" ]; then
   echo "${0##*/}: The access token is not valid." 1>&2
   exit 1

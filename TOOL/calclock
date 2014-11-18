@@ -8,7 +8,7 @@ print_usage_and_exit () {
   cat <<-__USAGE 1>&2
 	Usage   : ${0##*/} [+<n>h] [-r] <f1> <f2> ... <file>
 	        : ${0##*/} -d[r] <string>
-	Version : Fri May  9 21:34:18 JST 2014
+	Version : Sat Nov  8 15:40:34 JST 2014
 	        : Open usp Tukubai (POSIX.1 Bourne Shell/POSIX.1 commands)
 __USAGE
   exit 1
@@ -77,12 +77,12 @@ for arg in "$@"; do
   # check both
   j=0
   for s in $arg1 $arg2; do
-    if echo "_$s" | grep '^_[0-9]\+$' > /dev/null; then
+    if echo "_$s" | grep '^_[0-9]\{1,\}$' > /dev/null; then
       j=$((j+1))
       if [ "$s" -eq 0 ]; then
         all_fields=1
       fi
-    elif echo "_$s" | grep '^_\(NF\|NF-[0-9]\{1,\}\)$' > /dev/null; then
+    elif echo "_$s" | grep -E '^_(NF|NF-[0-9]+)$' > /dev/null; then
       j=$((j+1))
     fi
   done
@@ -285,8 +285,8 @@ function YYYYMMDDhhmmss2unixtime_prep(localtime_flag, gm,lo) {
   split("31 0 31 30 31 30 31 31 30 31 30 31", days_of_month);
 
   if (localtime_flag == "LOCALTIME") {
-    gm      = YYYYMMDDhhmmss2unixtime('$(TZ=UTC+0 date '+%Y%m%d%H%M%S')');
-    lo      = YYYYMMDDhhmmss2unixtime('$(         date '+%Y%m%d%H%M%S')');
+    gm      = YYYYMMDDhhmmss2unixtime("'$(TZ=UTC+0 date '+%Y%m%d%H%M%S')'");
+    lo      = YYYYMMDDhhmmss2unixtime("'$(         date '+%Y%m%d%H%M%S')'");
     offset  = lo - gm;
     offset -= (offset%2); # calcell the time lag of the two date starting time
   } else {
